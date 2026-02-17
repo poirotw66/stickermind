@@ -1,0 +1,5 @@
+{
+  "name": "StickerMind - LINE 貼圖題材生成與管理平台",
+  "description": "專為台灣創作者設計的 AI 貼圖題材生成器。利用 Gemini AI 自動產生爆款貼圖靈感，管理您的創作資料庫，並分析題材分佈。",
+  "requestFramePermissions": []
+}
