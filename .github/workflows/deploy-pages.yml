@@ -26,12 +26,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # Do not cache npm to avoid Rollup optional deps bug (npm#4828) on Linux
+          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          rm -rf node_modules
-          npm install
+        run: npm ci
+
+      # Workaround: npm optionalDependencies bug (npm/cli#4828) skips
+      # @rollup/rollup-linux-x64-gnu on Linux when lockfile was created elsewhere.
+      - name: Install Rollup Linux binary
+        run: npm install @rollup/rollup-linux-x64-gnu --no-save
 
       - name: Build
         run: npm run build
