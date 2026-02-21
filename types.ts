@@ -1,13 +1,13 @@
 
 export interface StickerIdea {
   id: string;
-  name: string;          // 題材名稱 (組合欄位: 角色 + 情緒 + 台詞)
-  role: string;          // 角色 (e.g., 社畜貓)
-  scenario: string;      // 情境 (e.g., 週一開會)
-  emotion: string;       // 情緒 (e.g., 崩潰)
-  catchphrase: string;   // 建議台詞 (e.g., 我想回家)
-  cultureTag: string;    // 台灣文化標籤 (e.g., 諧音梗, 珍奶)
-  targetAudience: string;// 目標客群
+  name: string;          // Display name (role + emotion + catchphrase)
+  role: string;          // Character role (e.g. office cat)
+  scenario: string;      // Visual/situation (e.g. Monday meeting)
+  emotion: string;       // Emotion (e.g. exhausted)
+  catchphrase: string;   // Short phrase (e.g. I want to go home)
+  cultureTag: string;    // Culture tag (e.g. pun, bubble tea)
+  targetAudience: string;// Target audience
   status: 'new' | 'drafting' | 'completed';
   isFavorite: boolean;
   createdAt: number;
@@ -15,10 +15,10 @@ export interface StickerIdea {
 
 export interface ThemeIdea {
   id: string;           // Unique ID for saving
-  title: string;        // 主題名稱 (e.g. 社畜貓的崩潰日常)
-  description: string;  // 主題描述 (這個主題在賣什麼？)
-  sellingPoint: string; // 行銷賣點 (為什麼這個受眾會買？)
-  examplePhrases: string[]; // 範例台詞 (3句)
+  title: string;        // Theme title (e.g. Office cat's exhausting daily)
+  description: string;  // What this theme is about
+  sellingPoint: string; // Why this audience would buy
+  examplePhrases: string[]; // Example phrases (3 items)
   createdAt: number;
 }
 
@@ -27,8 +27,8 @@ export interface GenerationParams {
   roleType: string;
   theme: string;
   style: string;
-  count: number;      // For stickers (content)
-  themeCount: number; // For themes (brainstorming)
+  count: number;      // Number of stickers to generate
+  themeCount: number; // Number of themes to brainstorm
 }
 
 export enum EmotionType {

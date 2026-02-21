@@ -1,13 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StickerIdea, ThemeIdea } from '../types';
 
 const STORAGE_KEY_IDEAS = 'stickermind_ideas_v1';
 const STORAGE_KEY_THEMES = 'stickermind_themes_v1';
+const PERSIST_DEBOUNCE_MS = 300;
 
 export const useIdeaStore = () => {
   const [ideas, setIdeas] = useState<StickerIdea[]>([]);
   const [themes, setThemes] = useState<ThemeIdea[]>([]);
   const [loading, setLoading] = useState(true);
+  const ideasTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const themesTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Load from local storage on mount
   useEffect(() => {
@@ -39,18 +42,30 @@ export const useIdeaStore = () => {
     setLoading(false);
   }, []);
 
-  // Save Ideas to local storage
+  // Debounced save: Ideas to local storage
   useEffect(() => {
-    if (!loading) {
+    if (loading) return;
+    if (ideasTimeoutRef.current) clearTimeout(ideasTimeoutRef.current);
+    ideasTimeoutRef.current = setTimeout(() => {
       localStorage.setItem(STORAGE_KEY_IDEAS, JSON.stringify(ideas));
-    }
+      ideasTimeoutRef.current = null;
+    }, PERSIST_DEBOUNCE_MS);
+    return () => {
+      if (ideasTimeoutRef.current) clearTimeout(ideasTimeoutRef.current);
+    };
   }, [ideas, loading]);
 
-  // Save Themes to local storage
+  // Debounced save: Themes to local storage
   useEffect(() => {
-    if (!loading) {
+    if (loading) return;
+    if (themesTimeoutRef.current) clearTimeout(themesTimeoutRef.current);
+    themesTimeoutRef.current = setTimeout(() => {
       localStorage.setItem(STORAGE_KEY_THEMES, JSON.stringify(themes));
-    }
+      themesTimeoutRef.current = null;
+    }, PERSIST_DEBOUNCE_MS);
+    return () => {
+      if (themesTimeoutRef.current) clearTimeout(themesTimeoutRef.current);
+    };
   }, [themes, loading]);
 
   // --- Sticker Ideas Actions ---

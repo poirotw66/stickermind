@@ -54,19 +54,27 @@ const Library: React.FC<LibraryProps> = ({
       );
   }, [themes, searchTerm]);
 
+  // Escape CSV field: double quotes become two double quotes per RFC 4180
+  const escapeCsvField = (value: string): string =>
+    `"${String(value).replace(/"/g, '""')}"`;
+
   const exportCSV = () => {
     let csvContent = "";
     if (activeTab === 'stickers') {
         const headers = ['ID', 'Name', 'Role', 'Emotion', 'Catchphrase', 'Scenario', 'CultureTag', 'Status'];
         csvContent = [
             headers.join(','),
-            ...filteredIdeas.map(i => `"${i.id}","${i.name}","${i.role}","${i.emotion}","${i.catchphrase}","${i.scenario}","${i.cultureTag}","${i.status}"`)
+            ...filteredIdeas.map(i =>
+              [i.id, i.name, i.role, i.emotion, i.catchphrase, i.scenario, i.cultureTag, i.status]
+                .map(escapeCsvField).join(','))
         ].join('\n');
     } else {
         const headers = ['ID', 'Title', 'Description', 'SellingPoint', 'ExamplePhrases'];
         csvContent = [
             headers.join(','),
-            ...filteredThemes.map(t => `"${t.id}","${t.title}","${t.description}","${t.sellingPoint}","${t.examplePhrases.join(' | ')}"`)
+            ...filteredThemes.map(t =>
+              [t.id, t.title, t.description, t.sellingPoint, t.examplePhrases.join(' | ')]
+                .map(escapeCsvField).join(','))
         ].join('\n');
     }
 

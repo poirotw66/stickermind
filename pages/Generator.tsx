@@ -420,7 +420,7 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
 
                  <div className="grid grid-cols-1 gap-4">
                   {generatedIdeas.map((idea, index) => (
-                    <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-start gap-4 hover:border-line-light transition-colors group">
+                    <div key={idea.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-start gap-4 hover:border-line-light transition-colors group">
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-sm group-hover:bg-line group-hover:text-white transition-colors">
                           {index + 1}
                         </div>

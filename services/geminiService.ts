@@ -1,8 +1,11 @@
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { GenerationParams, StickerIdea, ThemeIdea } from "../types";
 
-// Helper to generate unique IDs
-const generateId = () => Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+// Prefer crypto.randomUUID when available (browser/Node), fallback for older envs
+const generateId = (): string =>
+  typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 
 // Schema for Sticker Content (The 40 stickers)
 const STICKER_SCHEMA: Schema = {
