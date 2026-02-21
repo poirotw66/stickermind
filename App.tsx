@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Generator from './pages/Generator';
 import Library from './pages/Library';
+import Settings from './pages/Settings';
 import { useIdeaStore } from './store/useIdeaStore';
 
 const App: React.FC = () => {
@@ -51,6 +52,7 @@ const App: React.FC = () => {
               />
             } 
           />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

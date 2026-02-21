@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Lightbulb, Library, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Lightbulb, Library, Menu, X, Settings } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: '總覽儀表板', path: '/', icon: <LayoutDashboard size={20} /> },
     { name: '題材生成器', path: '/generator', icon: <Lightbulb size={20} /> },
     { name: '靈感資料庫', path: '/library', icon: <Library size={20} /> },
+    { name: '設定', path: '/settings', icon: <Settings size={20} /> },
   ];
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
