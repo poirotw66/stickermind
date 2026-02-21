@@ -8,11 +8,14 @@ import { useIdeaStore } from './store/useIdeaStore';
 
 const App: React.FC = () => {
   const { 
-    ideas, 
+    ideas,
+    themes, 
     addIdeas, 
     removeIdea, 
     toggleFavorite, 
-    updateStatus, 
+    updateStatus,
+    addTheme,
+    removeTheme, 
     clearAll,
     loading 
   } = useIdeaStore();
@@ -30,13 +33,18 @@ const App: React.FC = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard ideas={ideas} />} />
-          <Route path="/generator" element={<Generator onAddIdeas={addIdeas} />} />
+          <Route 
+            path="/generator" 
+            element={<Generator onAddIdeas={addIdeas} onAddTheme={addTheme} />} 
+          />
           <Route 
             path="/library" 
             element={
               <Library 
-                ideas={ideas} 
-                onRemove={removeIdea} 
+                ideas={ideas}
+                themes={themes}
+                onRemove={removeIdea}
+                onRemoveTheme={removeTheme} 
                 onToggleFavorite={toggleFavorite} 
                 onUpdateStatus={updateStatus}
                 onClearAll={clearAll}

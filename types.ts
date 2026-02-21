@@ -1,3 +1,4 @@
+
 export interface StickerIdea {
   id: string;
   name: string;          // 題材名稱 (組合欄位: 角色 + 情緒 + 台詞)
@@ -12,12 +13,22 @@ export interface StickerIdea {
   createdAt: number;
 }
 
+export interface ThemeIdea {
+  id: string;           // Unique ID for saving
+  title: string;        // 主題名稱 (e.g. 社畜貓的崩潰日常)
+  description: string;  // 主題描述 (這個主題在賣什麼？)
+  sellingPoint: string; // 行銷賣點 (為什麼這個受眾會買？)
+  examplePhrases: string[]; // 範例台詞 (3句)
+  createdAt: number;
+}
+
 export interface GenerationParams {
   targetAudience: string;
   roleType: string;
   theme: string;
   style: string;
-  count: number;
+  count: number;      // For stickers (content)
+  themeCount: number; // For themes (brainstorming)
 }
 
 export enum EmotionType {
