@@ -98,6 +98,7 @@ export async function generateStickerIdeas(params: GenerationParams): Promise<St
         responseMimeType: 'application/json',
         responseJsonSchema: STICKER_JSON_SCHEMA,
         maxOutputTokens: 8192,
+        temperature: 2,
         systemInstruction: 'You are a professional LINE Sticker Planner.',
       },
     });
@@ -158,6 +159,7 @@ export async function generateStickerThemes(params: GenerationParams): Promise<T
       config: {
         responseMimeType: 'application/json',
         responseJsonSchema: THEME_JSON_SCHEMA,
+        temperature: 2,
         systemInstruction: 'You are a creative director for LINE Creators Market Taiwan.',
       },
     });

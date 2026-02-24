@@ -108,6 +108,7 @@ app.post('/api/generate-stickers', async (req, res) => {
         responseMimeType: 'application/json',
         responseJsonSchema: STICKER_JSON_SCHEMA,
         maxOutputTokens: 8192,
+        temperature: 2,
         systemInstruction: 'You are a professional LINE Sticker Planner.',
       },
     });
@@ -174,6 +175,7 @@ app.post('/api/generate-themes', async (req, res) => {
       config: {
         responseMimeType: 'application/json',
         responseJsonSchema: THEME_JSON_SCHEMA,
+        temperature: 2,
         systemInstruction: 'You are a creative director for LINE Creators Market Taiwan.',
       },
     });
