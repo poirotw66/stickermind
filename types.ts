@@ -31,6 +31,48 @@ export interface GenerationParams {
   themeCount: number; // Number of themes to brainstorm
 }
 
+/** LINE sticker phrase set JSON: single = 4×4 grid (≤16), set = no grid (>16). */
+export type LineStickerPhraseSetJson =
+  | {
+      format: 'line-sticker-phrase-set';
+      version: number;
+      mode: 'single';
+      gridCols: 4;
+      gridRows: 4;
+      phrases: string[];
+      actionDescs: string[];
+    }
+  | {
+      format: 'line-sticker-phrase-set';
+      version: number;
+      mode: 'set';
+      phrases: string[];
+      actionDescs: string[];
+    };
+
+export function toLineStickerPhraseSetJson(ideas: StickerIdea[]): LineStickerPhraseSetJson {
+  const phrases = ideas.map((i) => i.catchphrase);
+  const actionDescs = ideas.map((i) => i.scenario);
+  if (ideas.length <= 16) {
+    return {
+      format: 'line-sticker-phrase-set',
+      version: 1,
+      mode: 'single',
+      gridCols: 4,
+      gridRows: 4,
+      phrases,
+      actionDescs,
+    };
+  }
+  return {
+    format: 'line-sticker-phrase-set',
+    version: 1,
+    mode: 'set',
+    phrases,
+    actionDescs,
+  };
+}
+
 export enum EmotionType {
   HAPPY = '開心/慶祝',
   SAD = '難過/討拍',

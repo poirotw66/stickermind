@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Sparkles, Loader2, Save, Layers, Lightbulb, ArrowRight, Bookmark, Check, Copy } from 'lucide-react';
+import { Sparkles, Loader2, Save, Layers, Lightbulb, ArrowRight, Bookmark, Check, Copy, Download } from 'lucide-react';
 import { generateStickerIdeas, generateStickerThemes } from '../services/geminiService';
-import { StickerIdea, ThemeIdea, GenerationParams, TARGET_AUDIENCES, ROLE_TYPES, STYLES } from '../types';
+import { StickerIdea, ThemeIdea, GenerationParams, TARGET_AUDIENCES, ROLE_TYPES, STYLES, toLineStickerPhraseSetJson } from '../types';
 import { useNavigate } from 'react-router-dom';
 
 interface GeneratorProps {
@@ -95,6 +95,17 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
     setParams({ ...params, theme: themeTitle });
     setMode('stickers');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDownloadAsJson = () => {
+    const payload = toLineStickerPhraseSetJson(generatedIdeas);
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `stickermind-phrases-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   // --- UI Components ---
@@ -194,14 +205,14 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
              <div className="flex justify-between items-center mb-1">
                <label className="block text-sm font-medium text-gray-700">生成張數</label>
                <button 
-                  onClick={() => setParams({...params, count: 40})}
+                  onClick={() => setParams({...params, count: 48})}
                   className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-0.5 rounded flex items-center gap-1 transition-colors"
                >
-                  <Layers size={12} /> 設定 40 張
+                  <Layers size={12} /> 設定 48 張
                </button>
              </div>
              <input 
-               type="range" min="8" max="40" step="4"
+               type="range" min="8" max="48" step="4"
                className="w-full accent-line"
                value={params.count}
                onChange={(e) => setParams({...params, count: parseInt(e.target.value)})}
@@ -278,7 +289,7 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
             <p>
               {mode === 'themes' 
                 ? '一個明確的主題（如：全職媽媽的崩潰）比通用的角色（如：可愛的貓）更容易吸引到特定族群購買喔！' 
-                : '設定 40 張能讓您的貼圖在商店看起來更豐富，CP 值更高，但也需要涵蓋更多實用情境。'}
+                : '最多可設定 48 張，讓您的貼圖在商店看起來更豐富，CP 值更高，但也需要涵蓋更多實用情境。'}
             </p>
           </div>
         </div>
@@ -381,18 +392,27 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
            {mode === 'stickers' && (
              <div className="space-y-6">
                {generatedIdeas.length > 0 && (
-                 <div className="flex justify-between items-center bg-green-50 p-4 rounded-xl border border-green-100">
-                   <div>
+                 <div className="flex flex-wrap items-center gap-3 bg-green-50 p-4 rounded-xl border border-green-100">
+                   <div className="flex-1 min-w-0">
                       <h2 className="text-lg font-bold text-gray-800">企劃完成！共 {generatedIdeas.length} 張</h2>
                       <p className="text-sm text-gray-600">主題：{params.theme || '未指定'}</p>
                    </div>
-                   <button 
-                    onClick={handleSaveAllIdeas}
-                    className="flex items-center gap-2 bg-slate-800 text-white px-5 py-2.5 rounded-lg hover:bg-slate-900 transition-colors shadow-lg font-medium"
-                   >
-                     <Save size={18} />
-                     全部儲存至資料庫
-                   </button>
+                   <div className="flex flex-wrap gap-2">
+                     <button 
+                       onClick={handleDownloadAsJson}
+                       className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                     >
+                       <Download size={18} />
+                       下載 JSON
+                     </button>
+                     <button 
+                      onClick={handleSaveAllIdeas}
+                      className="flex items-center gap-2 bg-slate-800 text-white px-5 py-2.5 rounded-lg hover:bg-slate-900 transition-colors shadow-lg font-medium"
+                     >
+                       <Save size={18} />
+                       全部儲存至資料庫
+                     </button>
+                   </div>
                  </div>
                )}
 
