@@ -24,6 +24,8 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
   
   // State to track if the user selected "Other" for role
   const [isCustomRole, setIsCustomRole] = useState(false);
+  // State to track if the user selected custom target audience
+  const [isCustomAudience, setIsCustomAudience] = useState(false);
   
   const [params, setParams] = useState<GenerationParams>({
     targetAudience: TARGET_AUDIENCES[0],
@@ -39,6 +41,10 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
   const handleGenerateThemes = async () => {
     if (!params.roleType.trim()) {
       setError("請選擇或輸入角色類型");
+      return;
+    }
+    if (isCustomAudience && !params.targetAudience.trim()) {
+      setError("請輸入目標客群");
       return;
     }
     setLoading(true);
@@ -59,6 +65,10 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
   const handleGenerateStickers = async () => {
     if (!params.roleType.trim()) {
       setError("請選擇或輸入角色類型");
+      return;
+    }
+    if (isCustomAudience && !params.targetAudience.trim()) {
+      setError("請輸入目標客群");
       return;
     }
     setLoading(true);
@@ -116,11 +126,31 @@ const Generator: React.FC<GeneratorProps> = ({ onAddIdeas, onAddTheme }) => {
         <label className="block text-sm font-medium text-gray-700 mb-1">目標客群 (TA)</label>
         <select 
           className="w-full border-gray-300 rounded-md shadow-sm focus:border-line focus:ring-line p-2 border"
-          value={params.targetAudience}
-          onChange={(e) => setParams({...params, targetAudience: e.target.value})}
+          value={isCustomAudience ? 'custom' : params.targetAudience}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === 'custom') {
+              setIsCustomAudience(true);
+              setParams({ ...params, targetAudience: '' });
+            } else {
+              setIsCustomAudience(false);
+              setParams({ ...params, targetAudience: val });
+            }
+          }}
         >
           {TARGET_AUDIENCES.map(t => <option key={t} value={t}>{t}</option>)}
+          <option value="custom">其他 (自訂)...</option>
         </select>
+        {isCustomAudience && (
+          <input
+            type="text"
+            autoFocus
+            placeholder="請輸入目標客群 (例：健身族、手遊玩家)"
+            className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:border-line focus:ring-line p-2 border bg-gray-50"
+            value={params.targetAudience}
+            onChange={(e) => setParams({ ...params, targetAudience: e.target.value })}
+          />
+        )}
       </div>
 
       <div>
